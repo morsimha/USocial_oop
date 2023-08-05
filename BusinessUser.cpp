@@ -3,6 +3,8 @@
 //
 
 #include "BusinessUser.h"
+#include <iostream>
+#include "User.h"
 
 BusinessUser::BusinessUser()
 {
@@ -13,12 +15,18 @@ BusinessUser::~BusinessUser()
 {
     // Perform any cleanup specific to business users here, if needed
 }
-
 void BusinessUser::sendMessage(User *user, Message *message)
 {
-    // Implement specific behavior for sending a message from a business user
-    // For example, you might want to log the message, add special formatting, etc.
+    SendMessage(user, message);
+}
 
-    // Call the base class implementation (or replace with custom logic)
-    User::sendMessage(user, message);
+void BusinessUser::SendMessage(User *user, Message *message)
+{
+    try {
+        user->receiveMessage(message);
+    }
+
+    catch (const std::runtime_error& e) {
+        std::cerr << "Error in sendMessage: " << e.what() << std::endl;
+    }
 }

@@ -14,6 +14,5 @@ Photo::~Photo() {
 }
 
 void Photo::display() {
-    std::cout << "Displaying photo from: " << filePath << std::endl;
+    std::cout << "image" << filePath << std::endl;
 }
-

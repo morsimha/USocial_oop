@@ -15,6 +15,7 @@ public:
 
     // Override the sendMessage method specific to BusinessUser
     void sendMessage(User *user, Message *message) override;
+    void SendMessage(User *user, Message *message);
 };
 
 #endif // MAMAN_11_BUSINESSUSER_H

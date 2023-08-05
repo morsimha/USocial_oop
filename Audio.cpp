@@ -20,5 +20,5 @@ Audio::~Audio() {
 }
 
 void Audio::display() {
-
+    std::cout << "Audio" << filePath << std::endl;
 }

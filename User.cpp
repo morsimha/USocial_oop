@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "User.h"
+#include "algorithm"
 
 unsigned long User::idCounter = 0; // Definition of static member
 
@@ -64,35 +65,67 @@ std::list<Post *> User::getPosts()
 {
     return posts;
 }
-
 void User::viewFriendsPosts()
 {
-    for (auto it = friends.begin(); it != friends.end(); ++it)
-    {
-        // Assuming a function to get the user by ID, then display their posts.
-        User *friendUser = us->getUserById(*it);
-        for (auto post : friendUser->getPosts())
+    try {
+        for (auto it = friends.begin(); it != friends.end(); ++it)
         {
-            post->getMedia()->display(); // Assuming a display function in Post class.
+            User *friendUser = us->getUserById(*it);
+            if (friendUser == nullptr) throw std::runtime_error("Friend user not found.");
+            for (auto post : friendUser->getPosts())
+            {
+                std::cout << "Post from " << friendUser->getName() << ": " << post->getText() << std::endl;
+                if(post-> getMedia() != nullptr){
+                    post->getMedia()->display();
+                }
+            }
         }
+    }
+    catch (const std::exception &e) {
+        std::cerr << "Error viewing friends' posts: " << e.what() << '\n';
     }
 }
 
-void User::receiveMessage(Message *message) // Corrected typo 'recieve' to 'receive'.
+
+void User::receiveMessage(Message *message)
 {
-    receivedMsgs.push_back(message); // Added to store received message.
+    if (message == nullptr) throw std::invalid_argument("Message cannot be null.");
+    receivedMsgs.push_back(message);
 }
 
 void User::sendMessage(User *user, Message *message)
 {
-    user->receiveMessage(message); // Assuming the user should receive the message.
+//    user->receiveMessage(message); // Assuming the user should receive the message.
+    try {
+        auto it = std::find(friends.begin(), friends.end(), user->getId());
+        if (it != friends.end()) {
+            user->receiveMessage(message);
+        }
+        else {
+            try{
+
+            }
+            catch (const std::runtime_error& e) {
+                std::cerr << "Error in sendMessage: " << e.what() << std::endl;
+            }
+            throw std::runtime_error("Cannot send message: User is not a friend");
+        }
+    }
+    catch (const std::runtime_error& e) {
+        std::cerr << "Error in sendMessage: " << e.what() << std::endl;
+    }
 }
 
 void User::viewReceivedMessages()
 {
-    for (auto message : receivedMsgs)
-    {
-        std::cout << message->getText() << std::endl;
+    try {
+        for (auto message : receivedMsgs)
+        {
+            if (message == nullptr) throw std::runtime_error("Received null message.");
+            std::cout << "From " << message->getSenderName() << ": " << message->getText() << std::endl;
+        }
+    }
+    catch (const std::exception &e) {
+        std::cerr << "Error viewing received messages: " << e.what() << '\n';
     }
 }
-
