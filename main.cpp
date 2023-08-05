@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-
+#include <stdexcept> // For exception handling
 
 // Abstract class for media objects
 class Media {
@@ -21,7 +21,7 @@ class Photo : public Media {
 public:
     Photo(const std::string &file, int w, int h) : Media(file), width(w), height(h) {}
     void display() const override {
-        std::cout << "Displaying photo: " << filename << " with dimensions: " << width << "x" << height << "\n";
+        std::cout << "Image: " << filename << " with dimensions: " << width << "x" << height << "\n";
     }
 };
 
@@ -31,7 +31,7 @@ class Audio : public Media {
 public:
     Audio(const std::string &file, double d) : Media(file), duration(d) {}
     void display() const override {
-        std::cout << "Playing audio: " << filename << " with duration: " << duration << " seconds\n";
+        std::cout << "Audio: " << filename << " with duration: " << duration << " seconds\n";
     }
 };
 
@@ -74,37 +74,54 @@ protected:
     std::vector<Post*> posts;
     std::vector<Message*> messages;
 
+    friend class US; // Declare USocial as a friend of User
+
+
 public:
     User(const std::string& n) : name(n) {}
-
-    void addFriend(User* user) { friends.push_back(user); }
     void addPost(Post* post) { posts.push_back(post); }
     virtual void sendMessage(User* recipient, const std::string& text);
     void receiveMessage(Message* msg) { messages.push_back(msg); } // Public method to add a message
+    void addFriend(User* user) {
+        // Check if the user is already a friend
+        if (std::find(friends.begin(), friends.end(), user) != friends.end()) {
+            throw std::runtime_error("User is already a friend.");
+        }
+        friends.push_back(user);
+    }
 
+    void printFriends() {
+        auto printFriendName = [](User* friendUser) {
+            std::cout << friendUser->name << "\n";
+        };
+
+        std::cout << "Friends of " << name << ":\n";
+        std::for_each(friends.begin(), friends.end(), printFriendName);
+    }
 };
 
 class US {
     std::vector<User*> users;
+    friend class user; // Declare USocial as a friend of User
+
 
 public:
     US() { std::cout << "USocial social network initialized.\n"; }
     void addUser(User* user) { users.push_back(user); }
-   // void addMediaToUser(User* user, Media* media) { user->addMedia(media); }
-    // Additional functionalities
 };
 
 class BusinessUser : public User {
 public:
     BusinessUser(const std::string& n) : User(n) {}
     void sendMessage(User* recipient, const std::string& text) override;
-    // Other functionalities specific to business users
 };
 
 void User::sendMessage(User* recipient, const std::string& text) {
     if (std::find(friends.begin(), friends.end(), recipient) != friends.end()) {
         Message* msg = new Message(text);
         recipient->receiveMessage(msg); // Use the public method
+    } else {
+        throw std::runtime_error("Recipient is not a friend."); // Exception handling
     }
 }
 
@@ -116,9 +133,9 @@ void BusinessUser::sendMessage(User* recipient, const std::string& text) {
 // Example usage
 int main() {
     US usocial;
-    User* alice = new User("Alice");
-    User* bob = new User("Bob");
-    BusinessUser* company = new BusinessUser("Company");
+    auto alice = new User("Alice"); // Using auto for type inference
+    auto bob = new User("Bob");
+    auto company = new BusinessUser("Company");
 
     usocial.addUser(alice);
     usocial.addUser(bob);
@@ -130,7 +147,17 @@ int main() {
     Post* post1 = new Post("Alice's post with photo", media1);
     alice->addPost(post1);
 
-    company->sendMessage(bob, "Promotion message to Bob");
+    try {
+        company->sendMessage(bob, "Promotion message to Bob");
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+    }
+
+    auto arik = new User("Arik");
+    auto bibi = new User("Bibi");
+
+    arik->addFriend(bibi);
+    arik->printFriends();
 
     post1->display(); // Display Alice's post
 
@@ -143,6 +170,3 @@ int main() {
 
     return 0;
 }
-
-
-
