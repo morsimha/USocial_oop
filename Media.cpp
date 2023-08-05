@@ -3,3 +3,12 @@
 //
 
 #include "Media.h"
+
+Media::Media() {
+    // Empty constructor body
+}
+
+
+std::string Media::getFilePath() {
+    return filePath;
+}

@@ -2,13 +2,21 @@
 // Created by morsimha on 8/5/2023.
 //
 
-#include "Video.h"
-#include "Audio.h"
-#include "Photo.h"
-#include "Media.h"
-#include <stdexcept> // For exception handling
-#include <algorithm>
-#include <vector>
-#include <string>
-#include <iostream>
 #include "Post.h"
+
+Post::Post(std::string text) : text(text), media(nullptr) {}
+
+Post::Post(std::string text, Media* media) : text(text), media(media) {}
+
+// Add this destructor definition.
+Post::~Post() {
+    delete media;
+}
+
+std::string Post::getText() {
+    return text;
+}
+
+Media* Post::getMedia() {
+    return media;
+}

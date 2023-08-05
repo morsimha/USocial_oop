@@ -11,3 +11,12 @@
 #include <string>
 #include <iostream>
 #include "Video.h"
+
+
+Video::Video() : Media() {
+    // Initialization code if needed
+}
+
+Video::~Video() {
+    // Destructor implementation
+}

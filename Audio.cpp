@@ -10,3 +10,15 @@
 #include <string>
 #include <iostream>
 #include "Audio.h"
+
+Audio::Audio() : Media() {
+    // Initialization code if needed
+}
+
+Audio::~Audio() {
+    // Destructor implementation
+}
+
+void Audio::display() {
+
+}
