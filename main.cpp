@@ -3,67 +3,16 @@
 #include <vector>
 #include <algorithm>
 #include <stdexcept> // For exception handling
+#include "Media.h"
+#include "Photo.h"
+#include "Audio.h"
+#include "Video.h"
+#include "Post.h"
+#include "Message.h"
 
-// Abstract class for media objects
-class Media {
-public:
-    Media(const std::string &file) : filename(file) {}
-    virtual void display() const = 0;
 
-protected:
-    std::string filename;
-};
 
-class Photo : public Media {
-    int width;
-    int height;
-
-public:
-    Photo(const std::string &file, int w, int h) : Media(file), width(w), height(h) {}
-    void display() const override {
-        std::cout << "Image: " << filename << " with dimensions: " << width << "x" << height << "\n";
-    }
-};
-
-class Audio : public Media {
-    double duration;
-
-public:
-    Audio(const std::string &file, double d) : Media(file), duration(d) {}
-    void display() const override {
-        std::cout << "Audio: " << filename << " with duration: " << duration << " seconds\n";
-    }
-};
-
-class Video : public Media {
-public:
-    Video(const std::string &file) : Media(file) {}
-    void display() const override {
-        std::cout << "Playing video: " << filename << "\n";
-    }
-};
-
-class Post {
-    std::string text;
-    Media* media;
-
-public:
-    Post(const std::string& t, Media* m = nullptr) : text(t), media(m) {}
-    void display() const {
-        std::cout << "Post: " << text << "\n";
-        if (media) media->display();
-    }
-};
-
-class Message {
-    std::string text;
-
-public:
-    Message(const std::string& t) : text(t) {}
-    void display() const {
-        std::cout << "Message: " << text << "\n";
-    }
-};
+// Forward declaration
 
 class User; // Forward declaration
 
@@ -100,15 +49,20 @@ public:
     }
 };
 
-class US {
+void User::sendMessage(User *recipient, const std::string &text) {
+
+}
+
+class USocial {
     std::vector<User*> users;
     friend class user; // Declare USocial as a friend of User
 
 
 public:
-    US() { std::cout << "USocial social network initialized.\n"; }
-    void addUser(User* user) { users.push_back(user); }
+    USocial() { std::cout << "USocial social network initialized.\n"; }
+    void registerUser(User* user) { users.push_back(user); }
 };
+
 
 class BusinessUser : public User {
 public:
@@ -116,14 +70,6 @@ public:
     void sendMessage(User* recipient, const std::string& text) override;
 };
 
-void User::sendMessage(User* recipient, const std::string& text) {
-    if (std::find(friends.begin(), friends.end(), recipient) != friends.end()) {
-        Message* msg = new Message(text);
-        recipient->receiveMessage(msg); // Use the public method
-    } else {
-        throw std::runtime_error("Recipient is not a friend."); // Exception handling
-    }
-}
 
 void BusinessUser::sendMessage(User* recipient, const std::string& text) {
     Message* msg = new Message(text);
@@ -132,14 +78,14 @@ void BusinessUser::sendMessage(User* recipient, const std::string& text) {
 
 // Example usage
 int main() {
-    US usocial;
+    USocial usocial;
     auto alice = new User("Alice"); // Using auto for type inference
     auto bob = new User("Bob");
     auto company = new BusinessUser("Company");
 
-    usocial.addUser(alice);
-    usocial.addUser(bob);
-    usocial.addUser(company);
+    usocial.registerUser(alice);
+    usocial.registerUser(bob);
+    usocial.registerUser(company);
 
     alice->addFriend(bob); // Alice and Bob are friends
 
@@ -167,6 +113,35 @@ int main() {
     delete alice;
     delete bob;
     delete company;
+
+
+//    USocial us;
+//    User *u1 = us.registerUser("Liron");
+//    User *u2 = us.registerUser("Yahav");
+//    User *u3 = us.registerUser("Shachaf");
+//    User *u4 = us.registerUser("Tsur", true);
+//    User *u5 = us.registerUser("Elit");
+//    u1->post("Hello world!");
+//    u2->post("I'm having a great time here :)", new Audio());
+//    u3->post("This is awesome!", new Photo());
+//    u5->addFriend(u1);
+//    u5->addFriend(u2);
+//    u5->viewFriendsPosts(); // should see only u1, u2 s' posts
+//    u4->sendMessage(u5, new Message("Buy Falafel!"));
+//    u5->viewReceivedMessages();
+//    try
+//    {
+//        u3->sendMessage(u5, new Message("All your base are belong to us"));
+//    }
+//    catch (const std::exception &e)
+//    {
+//        std::cout << "error: " << e.what() << std::endl;
+//    }
+//    u5->viewReceivedMessages();
+//    u3->addFriend(u5);
+//    u3->sendMessage(u5, new Message("All your base are belong to us"));
+//    u5->viewReceivedMessages()
+
 
     return 0;
 }
