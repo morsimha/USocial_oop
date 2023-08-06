@@ -9,8 +9,8 @@
 
 class Audio : public Media {
 public:
-    Audio(); // Empty constructor
-    virtual ~Audio(); // Destructor
+    Audio();
+    virtual ~Audio();
     void display() override;
 };
 #endif //MAMAN_11_AUDIO_H

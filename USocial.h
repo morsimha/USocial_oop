@@ -8,13 +8,13 @@
 #include <string>
 #include <map>
 
-class User; // Forward declaration of User
+class User; // Declaring User class in advance
 
 class USocial
 {
     friend class User;
 
-private:
+private: // using map to store users with their IDs
     std::map<unsigned long, User *> users;
 
 public:

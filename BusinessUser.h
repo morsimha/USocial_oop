@@ -13,7 +13,7 @@ public:
     BusinessUser();
     virtual ~BusinessUser();
 
-    // Override the sendMessage method specific to BusinessUser
+    // Overriding the sendMessage method
     void sendMessage(User *user, Message *message) override;
     void SendMessage(User *user, Message *message);
 };

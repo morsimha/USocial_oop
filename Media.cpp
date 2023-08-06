@@ -10,5 +10,5 @@ Media::Media() {
 
 
 std::string Media::getFilePath() {
-    return filePath;
+    return path;
 }

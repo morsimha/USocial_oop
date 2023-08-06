@@ -9,8 +9,8 @@
 
 class Photo : public Media {
 public:
-    Photo(); // constructor
-    virtual ~Photo(); // destructor
+    Photo();
+    virtual ~Photo();
     void display() override;
 };
 

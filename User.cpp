@@ -5,8 +5,8 @@
 #include <iostream>
 #include "User.h"
 #include "algorithm"
-
-unsigned long User::idCounter = 0; // Definition of static member
+// initializing static member
+unsigned long User::idCounter = 0;
 
 User::User()
 {
@@ -16,7 +16,7 @@ User::User()
 }
 
 User::~User()
-{
+{   //deleting all posts and messages
     for (auto &post : posts)
     {
         delete post;
@@ -26,7 +26,7 @@ User::~User()
     {
         delete message;
     }
-    // us is
+
 }
 
 unsigned long User::getId()
@@ -48,17 +48,17 @@ void User::removeFriend(User *user)
 {
     friends.remove(user->getId());
 }
-
+// storing the new post
 void User::post(std::string postContent)
 {
     Post *newPost = new Post(postContent);
-    posts.push_back(newPost); // Added this line to store the new post.
+    posts.push_back(newPost);
 }
 
 void User::post(std::string content, Media *media)
 {
     Post *newPost = new Post(content, media);
-    posts.push_back(newPost); // Added this line to store the new post with media.
+    posts.push_back(newPost);
 }
 
 std::list<Post *> User::getPosts()
@@ -66,7 +66,7 @@ std::list<Post *> User::getPosts()
     return posts;
 }
 void User::viewFriendsPosts()
-{
+{// storing the new post
     try {
         for (auto it = friends.begin(); it != friends.end(); ++it)
         {
@@ -95,19 +95,13 @@ void User::receiveMessage(Message *message)
 
 void User::sendMessage(User *user, Message *message)
 {
-//    user->receiveMessage(message); // Assuming the user should receive the message.
+    // sending message to a friend
     try {
         auto it = std::find(friends.begin(), friends.end(), user->getId());
         if (it != friends.end()) {
             user->receiveMessage(message);
         }
         else {
-            try{
-
-            }
-            catch (const std::runtime_error& e) {
-                std::cerr << "Error in sendMessage: " << e.what() << std::endl;
-            }
             throw std::runtime_error("Cannot send message: User is not a friend");
         }
     }
@@ -118,6 +112,7 @@ void User::sendMessage(User *user, Message *message)
 
 void User::viewReceivedMessages()
 {
+    // displaying each received message
     try {
         for (auto message : receivedMsgs)
         {

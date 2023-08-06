@@ -8,22 +8,20 @@
 
 BusinessUser::BusinessUser()
 {
-    // You can initialize specific attributes for a business user here, if needed
 }
 
 BusinessUser::~BusinessUser()
 {
-    // Perform any cleanup specific to business users here, if needed
 }
 void BusinessUser::sendMessage(User *user, Message *message)
 {
-    SendMessage(user, message);
+    SendMessage(user, message); // using our own SendMessage method
 }
 
 void BusinessUser::SendMessage(User *user, Message *message)
 {
     try {
-        user->receiveMessage(message);
+        user->receiveMessage(message); // Try to send the message
     }
 
     catch (const std::runtime_error& e) {

@@ -2,33 +2,37 @@
 // Created by morsimha on 8/5/2023.
 //
 #include "USocial.h"
-#include "BusinessUser.h" // Make sure to include this if BusinessUser is defined in a separate header
+#include "BusinessUser.h"
 #include "User.h"
 
 class User;
+// registering a new user. If they're a business user, creating a BusinessUser object, otherwise just a regular User object.
+
 User *USocial::registerUser(const std::string name, bool isBusiness)
 {
     User *newUser = isBusiness ? new BusinessUser() : new User();
     newUser -> name = name;
     newUser -> us = this;
-    unsigned long id = users.size()+1; // This could be replaced with a more robust ID generation logic
+    unsigned long id = users.size()+1;
     users[id] = newUser;
     return newUser;
 }
 
+// when we need to remove a user from our system. find them in our users map and then erase them.
 void USocial::removeUser(User *userToRemove)
 {
     for (auto it = users.begin(); it != users.end(); ++it)
     {
         if (it->second == userToRemove)
         {
-            delete it->second; // Free memory for the user
-            users.erase(it);   // Remove the user from the map
-            break;             // Exit the loop as the iterator is now invalid
+            delete it->second;
+            users.erase(it);
+            break;
         }
     }
 }
 
+//find a user by its id, if not found return null
 User *USocial::getUserById(unsigned long id)
 {
     auto it = users.find(id); // Find user by id

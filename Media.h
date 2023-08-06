@@ -9,11 +9,11 @@
 
 class Media {
 protected:
-    std::string filePath;
+    std::string path; // Where the media file's at
 
 public:
     Media(); // Default empty constructor
-    virtual void display() = 0; // Pure virtual function
+    virtual void display() = 0; // Display function, to be defined in a derived class
     std::string getFilePath();
 };
 

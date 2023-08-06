@@ -15,7 +15,7 @@ private:
 public:
     Post(std::string text);
     Post(std::string text, Media* media);
-    ~Post();  // Add this line for the destructor declaration.
+    ~Post();
 
     std::string getText();
     Media* getMedia();

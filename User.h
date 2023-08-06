@@ -11,19 +11,19 @@
 #include <string>
 #include <list>
 
-class USocial; // Forward declaration
+class USocial;
 
 class User
-{
+{  // USocial has access to User's private and protected members
     friend class USocial;
 protected:
-    static unsigned long idCounter; // Declare static member
+    static unsigned long idCounter;
     USocial *us;
     unsigned long id;
     std::string name;
     std::list<unsigned long> friends;
     std::list<Post *> posts;
-    std::list<Message *> receivedMsgs; // Corrected typo
+    std::list<Message *> receivedMsgs;
     User();
     virtual ~User();
 
@@ -32,14 +32,14 @@ public:
     std::string getName();
     void addFriend(User *);
     void removeFriend(User *user);
-    void post(std::string postContent); // Use std::string
-    void post(std::string, Media *); // Use std::string
+    void post(std::string postContent);
+    void post(std::string, Media *);
     std::list<Post *> getPosts();
     void viewFriendsPosts();
-    void receiveMessage(Message *); // Corrected function name
+    void receiveMessage(Message *);
     virtual void sendMessage(User *, Message *);
     void viewReceivedMessages();
-}; // Added semicolon
+};
 
 #endif //MAMAN_11_USER_H
 

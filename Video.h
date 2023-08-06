@@ -9,8 +9,8 @@
 
 class Video : public Media {
 public:
-    Video(); // constructor
-    virtual ~Video(); // destructor
+    Video();
+    virtual ~Video();
     void display() override;
 };
 

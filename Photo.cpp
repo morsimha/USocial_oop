@@ -12,7 +12,7 @@ Photo::Photo() : Media() {
 Photo::~Photo() {
 
 }
-
+// Photo's display function
 void Photo::display() {
-    std::cout << "image" << filePath << std::endl;
+    std::cout << "  Displaying an image... " << path << std::endl;
 }
